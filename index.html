@@ -1,14 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>我的留言板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            
+            /* PLACEHOLDER: Background Image Setup */
+            /* Replace the URL below with the path to your background image file */
+            /* Example: background-image: url('images/scam-background.jpg'); */
+            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/001/280/649/original/happy-family-playing-in-the-park-together-video.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* Fallback color if the image doesn't load */
+            background-color: #f4f7f6; 
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            /* Changed to slightly transparent white so the background image shows through */
+            background-color: rgba(255, 255, 255, 0.95); 
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 380px;
+            text-align: center; /* Centers the logo and text */
+        }
+        
+        /* New styling for the logo placeholder */
+        .brand-logo {
+            max-width: 150px; /* Adjust this value based on your logo's size */
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .service-name {
+            color: #333333;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left; /* Keeps the form labels aligned left */
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555555;
+            font-weight: 600;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        .input-group input:focus {
+            border-color: #d62828; /* Changed focus color to a "warning" red for the scam vibe */
+            outline: none;
+            box-shadow: 0 0 5px rgba(214, 40, 40, 0.3);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-btn:hover {
+            background-color: #004494;
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
 </head>
 <body>
-    <h2>请在下方输入内容：</h2>
-    <form action="/submit" method="POST">
-        <input type="text" name="message" placeholder="请输入内容" required>
-        <button type="submit">提交</button>
-    </form>
+
+    <div class="login-container">
+        
+        <img src="/logo.png" alt="Brand Logo" class="brand-logo">
+
+        <h2 class="service-name">Login Here</h2>
+
+        <form action="/submit" method="POST">
+            <div class="input-group">
+                <label for="username">User ID</label>
+                <input type="text" id="username" name="username" required autocomplete="off" placeholder="Enter your ID">
+            </div>
+            <div class="input-group">
+                <label for="password">Security Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="login-btn">Secure Login</button>
+        </form>
+        
+        <div class="footer-text">
+            &copy; 2026 rnaybank. All rights reserved. <br>
+            Protected by Advanced Encryption.
+        </div>
+    </div>
+
 </body>
 </html>
